@@ -15,7 +15,9 @@ require.config({
     }
   }
 
-    , baseUrl: '../'
+  , baseUrl: '../'
+
+  , urlArgs: (new Date()).getTime()
 
   , paths: {
       jquery: 'libs/jquery.min'
@@ -31,6 +33,8 @@ require.config({
 
 define([
     'util'
+  , 'spec/models/todo.spec'
+  , 'spec/collections/todos.spec'
 ], function(util) {
   util.log('loaded');
 });
