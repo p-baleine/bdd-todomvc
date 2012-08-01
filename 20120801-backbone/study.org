@@ -1,0 +1,47 @@
+* Backbone.jsとJasmineでBDD
+
+** 目的
+ - BDDは楽しい
+ - Backbone.js等クライアントサイドMVCのフレームワークについて
+
+*** 前知識
+**** BDD(振舞駆動開発)
+ - TDD(テスト駆動開発)みたいなもの
+ - テストの代わりにスペック(仕様)を記載する
+ - スペックファースト
+ - RubyならTDDだとtest/unit、BDDだとRSpec
+ - PHPならTDDだとPHPUnit、BDDだとBehat
+ - JavaScriptならTDDだとQunit、BDDだとJasmine, vows, mocha ...
+
+**** クライアントサイドMVC
+ - クライアントサイドMVCが必要になるようなアプリ
+ - [[http://www.oreilly.co.jp/books/9784873115542/][ステートフルJavascrit]]
+ - Ember.jsの[[http://emberjs.com/guides/ember_mvc/][ガイド]]
+ - フレームワーク
+   + [[http://backbonejs.org/][Backbone.js]] *
+   + [[http://spinejs.com/][Spine.js]] *
+   + [[http://javascriptmvc.com/][JavascriptMVC]]
+   + [[http://angularjs.org/][AndularJS]]
+   + [[http://knockoutjs.com/][Knockoutjs]] *
+   + [[http://emberjs.com/][Ember.js]] *
+
+**** モジュール
+ - CommonJS
+   + Node.js
+   + Titanium
+ - AMD
+   + Dojo
+   + Require.js
+ - ES Harmony
+
+*** 今回やってみたこと
+フレームワークとしてBackbone.js、モジュール化の機構としてRequire.js、
+Jasmineを用いたBDDスタイルでTodoアプリを作ってみる
+（参考サイト: http://tinnedfruit.com/2011/03/03/testing-backbone-apps-with-jasmine-sinon.html）
+
+ - まだ全部できていないです
+ - 慣れてないのでつまずきます
+ - できるとこまでやってみます
+ - 後日完成形をgithubにあげとくつもり
+ - Spine.js, Knockoutjs, Ember.jsについても書いてみるつもり
+ - Automationについては調査中、jasmine-node, zombie, phantomjs...
