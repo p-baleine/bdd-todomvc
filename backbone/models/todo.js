@@ -1,21 +1,20 @@
 define([
-    'myutil'
-  , 'backbone'
-], function(util) {
+  'backbone'
+], function() {
 
-  var TodoModel = Backbone.Model.extend({
+  var Todo = Backbone.Model.extend({
 
     defaults: {
       'priority': 3
     },
 
-    validate: function(attr) {
-      if ( !attr.title ) {
-        return 'cannot have an empty title';
+    validate: function(attrs) {
+      if ( !attrs.title ) {
+        return 'タイトルを入力してください';
       }
     }
 
   });
 
-  return TodoModel;
+  return Todo;
 });

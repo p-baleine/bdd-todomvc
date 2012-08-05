@@ -1,56 +1,60 @@
-require([
-    'models/todo'
-  , 'myutil'
-  , 'sinon'
-  , 'backbone'
-  , 'jasmine_sinon'
-], function(TodoModel, util, sinon, Backbone, jasmine_sinon) {
+(function() {
 
-  describe('TodoModel', function() {
+  var stubs = {},
+      context = createContext(stubs);
+
+  context(['models/todo'], function(Todo) {
     beforeEach(function() {
-      this.todo = new TodoModel({
-        title: 'hoge'
-      });
-      this.todo.collection = {
-        url: '/collection url'
-      };
+      this.todo = new Todo();
+      this.todo.collection = { url: '/collection url' };
     });
 
-    describe('インスタンス生成時', function() {
-      it ('指定したプロパティを保持していること', function() {
-        expect(this.todo.get('title')).toEqual('hoge');
-      });
+    describe('Todo', function() {
+      describe('インスタンス生成時', function() {
+        beforeEach(function() {
+          this.todo = new Todo({ id: 5, title: 'hoge' });
+        });
 
-      it ('デフォルトの優先度を保持していること', function() {
-        expect(this.todo.get('priority')).toEqual(3);
-      });
-    });
+        it ('指定した属性値を保持していること', function() {
+          expect(this.todo.get('title')).toEqual('hoge');
+        });
 
-    // validationのspecに先立って、validation時のsave(), set()時に利用される
-    // urlプロパティをチェック
-    describe('URL', function() {
-      describe('idを持っていない場合', function() {
-        it ('コレクションのURLを保持していること', function() {
-          expect(this.todo.url()).toEqual('/collection url');
+        describe('優先度を指定しないで生成した場合', function() {
+          it ('デフォルトの優先度3を保持していること', function() {
+            expect(this.todo.get('priority')).toEqual(3);
+          });
         });
       });
 
-      describe('idを持っている場合', function() {
-        it ('コレクションのURL + idを保持していること', function() {
-          this.todo.id = 1;
-          expect(this.todo.url()).toEqual('/collection url/1');
+      describe('URL', function() {
+        describe('idが付与されていない場合', function() {
+          it ('コレクションのURLを保持しいていること', function() {
+            expect(this.todo.url()).toEqual('/collection url');
+          });
+        });
+
+        describe('idが付与されている場合', function() {
+          it ('コレクションのURL + idのURLを保持しいていること', function() {
+            this.todo.id = 3;
+            expect(this.todo.url()).toEqual('/collection url/3');
+          });
         });
       });
-    });
 
-    describe('validation', function() {
-      it ('タイトルが空の場合saveされないこと', function() {
-        var eventSpy = sinon.spy();
-        this.todo.on('error', eventSpy);
-        this.todo.save({ 'title': '' });
-        expect(eventSpy).toHaveBeenCalledOnce();
-        expect(eventSpy).toHaveBeenCalledWith(this.todo, 'cannot have an empty title');
+      describe('validation', function() {
+        describe('タイトルが設定されていない場合', function() {
+          it ('save()されないこと', function() {
+            var eventSpy = sinon.spy();
+            this.todo.on('error', eventSpy);
+            this.todo.save({ 'title': '' });
+            expect(eventSpy).toHaveBeenCalledOnce();
+            expect(eventSpy).toHaveBeenCalledWith(this.todo,
+              'タイトルを入力してください'
+            );
+          });
+        });
       });
     });
   });
-});
+
+}());

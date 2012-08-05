@@ -1,22 +1,20 @@
 define([
-    'myutil'
-  , 'views/todo'
+    'views/todo'
   , 'backbone'
-], function(util, TodoView) {
+], function(TodoItem) {
 
-  var TodoListView = Backbone.View.extend({
-    tagName: 'ul',
-    className: 'todos',
+  var TodoList = Backbone.View.extend({
 
     render: function() {
       this.collection.each(this.addOne);
     },
 
     addOne: function(todo) {
-      var view = new TodoView({ model: todo });
+      var item = new TodoItem({ model: todo });
     }
+
   });
 
-  return TodoListView;
+  return TodoList;
 
 });

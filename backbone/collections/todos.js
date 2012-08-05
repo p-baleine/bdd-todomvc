@@ -1,23 +1,18 @@
 define([
     'models/todo'
-  , 'myutil'
   , 'backbone'
-], function(TodoModel, util) {
+], function(Todo) {
 
-  var TodosCollection = Backbone.Collection.extend({
+  var Todos = Backbone.Collection.extend({
 
-    model: TodoModel,
-
-    url: '/todos',
+    model: Todo,
 
     comparator: function(todo) {
+      console.log(todo.get('priority'));
       return todo.get('priority');
-    },
-
-    parse: function(res) {
-      return res.response.todos;
     }
+
   });
 
-  return TodosCollection;
+  return Todos;
 });

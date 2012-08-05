@@ -1,50 +1,39 @@
-require([
-    'myutil'
-  , 'views/todolist'
-  , 'sinon'
-  , 'testr'
-  , 'backbone'
-  , 'jasmine_jquery'
-], function(util) {
+$(function() {
 
-  describe('TodoListView', function() {
-    beforeEach(function() {
-      this.todoViewStub = sinon.stub().returns(new Backbone.View());
-      this.TodoListView = testr('views/todolist', {
-        'views/todo': this.todoViewStub
-      });
-      this.view = new this.TodoListView();
-    });
+  var todoItem = new Backbone.View(),
+      TodoItemStub = sinon.stub().returns(todoItem),
+      stubs = {
+        'views/todo': TodoItemStub
+      },
+      context = createContext(stubs);
 
-    describe('インスタンス生成時', function() {
-      it ('リストのルート要素を持っていること', function() {
-        expect(this.view.el.tagName).toEqual('UL');
-      });
+  context(['views/todolist'], function(TodoList) {
+    describe('TodoList', function() {
 
-      it ('クラス`todos`を持っていること', function() {
-        expect(this.view.$el).toHaveClass('todos');
-      });
-    });
-
-    describe('描画', function() {
       beforeEach(function() {
-        this.todo1 = new Backbone.Model({ id: 1 });
-        this.todo2 = new Backbone.Model({ id: 2 });
-        this.todo3 = new Backbone.Model({ id: 3 });
-        this.view.collection = new Backbone.Collection([
-          this.todo1,
-          this.todo2,
-          this.todo3
-        ]);
-        this.view.render();
+        console.log(TodoList);
+        this.todoList = new TodoList();
       });
 
-      it ('各todoモデルについてTodoビューを生成すること', function() {
-        expect(this.todoViewStub).toHaveBeenCalledThrice();
-        expect(this.todoViewStub).toHaveBeenCalledWith({ model: this.todo1 });
-        expect(this.todoViewStub).toHaveBeenCalledWith({ model: this.todo2 });
-        expect(this.todoViewStub).toHaveBeenCalledWith({ model: this.todo3 });
+      describe('描画', function() {
+        beforeEach(function() {
+          this.todo1 = new Backbone.Model({ id: 1 });
+          this.todo2 = new Backbone.Model({ id: 2 });
+          this.todo3 = new Backbone.Model({ id: 3 });
+          this.todoList.collection = new Backbone.Collection([
+            this.todo1,
+            this.todo2,
+            this.todo3
+          ]);
+          this.todoList.render();
+        });
+
+        it ('各todoモデルに対してTodoItemビューを描画すること', function() {
+          expect(TodoItemStub).toHaveBeenCalledThrice();
+        });
       });
+
     });
   });
+
 });
