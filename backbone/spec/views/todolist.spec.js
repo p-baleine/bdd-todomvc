@@ -11,7 +11,6 @@ $(function() {
     describe('TodoList', function() {
 
       beforeEach(function() {
-        console.log(TodoList);
         this.todoList = new TodoList();
       });
 

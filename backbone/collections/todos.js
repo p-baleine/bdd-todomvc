@@ -8,7 +8,6 @@ define([
     model: Todo,
 
     comparator: function(todo) {
-      console.log(todo.get('priority'));
       return todo.get('priority');
     }
 
