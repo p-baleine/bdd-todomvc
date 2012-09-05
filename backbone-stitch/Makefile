@@ -6,4 +6,7 @@ test:
 	--recursive \
 	--globals document
 
-.PHONY: test
+build:
+	node .
+
+.PHONY: test build
