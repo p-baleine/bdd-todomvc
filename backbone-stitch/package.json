@@ -1,0 +1,17 @@
+{
+    "name": "stitch_test"
+  , "description": "stitch_test"
+  , "version": "0.0.1"
+  , "dependencies": { 
+      "stitch": "*"
+  }
+  , "devDependencies" : {
+      "mocha": "*"
+    , "should": "*"
+    , "sinon": "*"
+    , "underscore": "*"
+    , "jquery": "*"
+    , "backbone": "*"
+    , "jsdom": "*"
+  }
+}

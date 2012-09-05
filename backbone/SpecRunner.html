@@ -17,7 +17,8 @@
   <script src="libs/jasmine-jquery.js"></script>
   <script src="libs/jasmine-sinon.js"></script>
   <script src="libs/stub-context.js"></script>
-
+  <script>window.swank_server = 'http://localhost:8009/';</script>
+  <script src="http://localhost:8009/swank-js/swank-js-inject.js"></script>
   <!-- include source files here... -->
 
   <!-- include spec files here... -->
@@ -48,6 +49,7 @@
         jasmineEnv.execute();
       }
 
+      window.execJasmine = execJasmine;
     })();
   </script>
 
