@@ -16,18 +16,24 @@ var TodoList = module.exports = Backbone.View.extend({
 
   initialize: function() {
     this.collection = new Todos();
+    this.collection.on('add', this.renderOne, this);
   },
 
   render: function() {
-    this.collection.each(function(model) {
-      new TodoItem(model);
-    });
+    this.collection.each(this.renderOne, this);
+  },
+
+  renderOne: function(model) {
+    var view = new TodoItem(model);
+    this.$el.append(view.render().el);
   },
 
   addOne: function(e) {
-    if ((e.which && e.which === 13) || (e.keyCode && e.keyCode === 13)) {
-      this.collection.add([{ content: $(e.target).val() }]);
+    if (!(e.which && e.which === 13) && !(e.keyCode && e.keyCode === 13)) {
+      return;
     }
+
+    this.collection.add([{ content: $(e.target).val() }]);
   }
 
 });
