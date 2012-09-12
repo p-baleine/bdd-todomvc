@@ -9,9 +9,7 @@ var fs = require('fs')
   , Backbone = require('backbone')
   , helper = require('../helper');
 
-/**
- * html
- */
+// html
 var html = fs.readFileSync('./test/views/test-view.html').toString();
 
 describe('TodoList view', function() {
@@ -19,7 +17,7 @@ describe('TodoList view', function() {
     // mocks
     this.TodoItem = Backbone.View.extend();
     this.Todo = Backbone.Model.extend();
-    this.Todos = Backbone.Collection.extend({ model: this.Todo });
+    this.Todos = Backbone.Collection.extend({ model: this.Todo, url: '/hoge' });
 
     mockery.registerMock('./todo-item', this.TodoItem);
     mockery.registerMock('../collections/todos', this.Todos);
@@ -52,106 +50,105 @@ describe('TodoList view', function() {
     this.todoList.should.be.an.instanceOf(Backbone.View);
   });
 
-  describe('rendering', function() {
-    describe('collection', function() {
-      before(function() {
-        sinon.spy(this.todoList, 'renderOne');
-        this.todoList.collection.add([{ id: 3 }, { id: 2 }, { id: 1 }]);
-        this.todoList.render();
-      });
-
-      after(function() {
-        this.todoList.collection.reset();
-        this.todoList.renderOne.restore();
-      });
-
-      it ('should render todo items thrice', function() {
-        this.todoList.renderOne.calledThrice.should.be.ok;
-        this.todoList.renderOne.args[0][0].attributes.should.eql({ id: 3 });
-      });
+  describe('initialize', function() {
+    beforeEach(function() {
+      sinon.stub(Backbone, 'sync'); // return
+      sinon.spy(this.Todos.prototype, 'fetch');
+      this.todoList = new this.TodoList({ el: '#main' });
     });
 
-    describe('one item', function() {
-      beforeEach(function() {
-        sinon.spy(this.TodoItem.prototype, 'initialize');
-        sinon.spy(this.TodoItem.prototype, 'render');
-        sinon.spy(this.todoList.$el, 'append');
-        this.todo = new Backbone.Model({ id: 1 });
-        this.todoList.renderOne(this.todo);
+    afterEach(function() {
+      Backbone.sync.restore();
+      this.Todos.prototype.fetch.restore();
+      this.todoList.collection.reset();
+    });
+
+    it ('should fetch Todos', function() {
+      this.Todos.prototype.fetch.calledOnce.should.be.ok;
+    });
+
+    describe('event listening', function() {
+      describe('when add event is fired on Todos collection', function() {
+        beforeEach(function() {
+          sinon.spy(this.TodoItem.prototype, 'render');
+
+          this.added = new Backbone.Model({ content: 'piyo' });
+          this.todoList.collection.add(this.added);
+        });
+
+        afterEach(function() {
+          this.TodoItem.prototype.render.restore();
+        });
+
+        it ('should render TodoItem view with passed model', function() {
+          this.TodoItem.prototype.render.calledOnce.should.be.ok;
+        });
       });
 
-      afterEach(function() {
-        this.TodoItem.prototype.initialize.restore();
-        this.TodoItem.prototype.render.restore();
-        this.todoList.$el.append.restore();
+      describe('when reset event is fired on Todos collection', function() {
+        it ('should re-render entire TodoItem views');
       });
+    });
+  });
 
-      it ('should instantiate TodoItem', function() {
-        this.TodoItem.prototype.initialize.calledOnce.should.be.ok;
-        this.TodoItem.prototype.initialize.args[0][0].id.should.equal(1);
-      });
+  describe('rendering', function() {
+    beforeEach(function() {
+      sinon.spy(this.TodoItem.prototype, 'initialize');
+      sinon.spy(this.TodoItem.prototype, 'render');
+      sinon.spy(this.todoList.$el, 'append');
 
-      it ('should render TodoItem', function() {
-        this.TodoItem.prototype.render.calledOnce.should.be.ok;
-      });
+      this.todoList.collection.add([{ id: 3 }, { id: 2 }, { id: 1 }], { silent: true });
+      this.todoList.render();
+    });
 
-      it ('should append rendered TodoItem\'s el to its el', function() {
-        this.todoList.$el.append.calledOnce.should.be.ok;
-      });
+    afterEach(function() {
+      this.TodoItem.prototype.initialize.restore();
+      this.TodoItem.prototype.render.restore();
+      this.todoList.$el.append.restore();
+      this.todoList.collection.reset();
+    });
+
+    it ('should create TodoItem', function() {
+      this.TodoItem.prototype.initialize.calledThrice.should.be.ok;
+      this.TodoItem.prototype.initialize.args[0][0].id.should.equal(3);
+      this.TodoItem.prototype.initialize.args[1][0].id.should.equal(2);
+      this.TodoItem.prototype.initialize.args[2][0].id.should.equal(1);
+    });
+
+    it ('should render TodoItem', function() {
+      this.TodoItem.prototype.render.calledThrice.should.be.ok;
+    });
+
+    it ('should append rendered TodoItem\'s el to its el', function() {
+      this.todoList.$el.append.calledThrice.should.be.ok;
     });
   });
 
   describe('create new todo', function() {
     describe('when enter-key event is pressed', function() {
       describe('when text value is set', function() {
-        before(function() {
+        beforeEach(function() {
           var input = this.$(document).find('#new-todo')
             , event = this.$.Event('keypress');
 
-          sinon.spy(this.Todos.prototype, 'add');
+          sinon.spy(this.todoList.collection, 'add');
 
-          this.expected = { content: 'hoge' };
+          this.expected = { content: 'hoge123' };
 
           event.keyCode = 13;
           input.val(this.expected.content);
           input.trigger(event);
         });
 
-        after(function() {
-          this.Todos.prototype.add.restore();
+        afterEach(function() {
+          this.todoList.collection.add.restore();
           this.todoList.collection.reset();
         });
 
         it ('should call add on Todos collection', function() {
-          this.Todos.prototype.add.calledOnce.should.be.ok;
-          this.Todos.prototype.add.args[0][0].should.eql([this.expected]);
+          this.todoList.collection.add.calledOnce.should.be.ok;
+          this.todoList.collection.add.args[0][0].should.eql([this.expected]);
         });
-      });
-    });
-
-    describe('when add event is fired on Todos collection', function() {
-      before(function() {
-        var init = this.TodoList.prototype.initialize;
-
-        // spying event related method
-        this.TodoList.prototype.initialize = function() {
-          sinon.spy(this, 'renderOne');
-          init.apply(this, arguments);
-        };
-
-        this.todoList = new this.TodoList({ el: '#main' });
-
-        this.added = new Backbone.Model({ content: 'piyo' });
-        this.todoList.collection.add(this.added);
-      });
-
-      after(function() {
-        this.todoList.renderOne.restore();
-      });
-
-      it ('should render new TodoItem view', function() {
-        this.todoList.renderOne.calledOnce.should.be.ok;
-        this.todoList.renderOne.args[0][0].get('content').should.eql('piyo');
       });
     });
   });

@@ -17,6 +17,7 @@ var TodoList = module.exports = Backbone.View.extend({
   initialize: function() {
     this.collection = new Todos();
     this.collection.on('add', this.renderOne, this);
+    this.collection.fetch();
   },
 
   render: function() {
