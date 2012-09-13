@@ -1,0 +1,10 @@
+{
+   "name": "bdd-todomvc-backbone-component"
+  , "version": "0.0.1"
+  , "dependencies": {
+      "component": "*"
+  }
+  , "devDependencies": {
+      "buster": "*"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "backbone-component",
+  "repo": "p-baleine/backbone-component",
+  "description": "backbone-component",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "component/jquery": "*",
+    "solutionio/backbone": "*"
+  },
+  "development": {},
+  "scripts": [
+    "src/models/todo.js",
+    "src/collections/todos.js",
+    "src/views/todo-item.js",
+    "src/views/todo-list.js",
+    "template.js"
+  ],
+  "styles": [
+    "backbone-component.css"
+  ]
+}
