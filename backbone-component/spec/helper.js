@@ -1,9 +1,11 @@
-(function(global) {
+(function() {
+
+  var global = this;
 
   function stubRequire(map) {
-    var originalRequire = window.require;
+    var originalRequire = global.require;
 
-    this.stub(window, 'require', function(path) {
+    this.stub(global, 'require', function(path) {
       var p;
 
       for (p in map) {
@@ -12,7 +14,7 @@
         }
       }
 
-      return originalRequire.apply(window, arguments);
+      return originalRequire.apply(global, arguments);
     });
   }
 
@@ -23,9 +25,9 @@
     Backbone.$ = $;
   }
 
-  this['specHelper'] = {
+  global['specHelper'] = {
     stubRequire: stubRequire,
     setupViewSpec: setupViewSpec
   };
 
-}(this));
+}.call(this));
