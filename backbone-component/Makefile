@@ -9,7 +9,7 @@ components:
 	@component install
 
 clean:
-	rm -fr build components template.js
+	rm -fr build components template.js ./src/templates/*.js
 
 test: build
 	@./node_modules/.bin/buster test --reporter specification
