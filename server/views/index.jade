@@ -1,0 +1,19 @@
+doctype 5
+html(lang="en")
+  head
+    script(src='/javascripts/application.js')
+    script
+      (function() {
+        var $ = require('component-jquery')
+          , Backbone = require('solutionio-backbone');
+
+        Backbone.$ = $;
+
+        $(function() {
+          var TodoList = require('backbone-component/src/views/todo-list')
+            , todoList = new TodoList({ el: '#main' });
+        });
+      }());
+  body
+    #main
+      input.create-todo

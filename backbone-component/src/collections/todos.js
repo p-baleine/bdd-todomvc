@@ -5,6 +5,10 @@ var Todos = module.exports = Backbone.Collection.extend({
 
   model: Todo,
 
-  url: '/hoge'
+  url: '/todos',
+
+  parse: function(response) {
+    return response.data;
+  }
 
 });

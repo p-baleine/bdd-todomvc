@@ -40,18 +40,32 @@ describe('TodoList view', function() {
   });
 
   describe('event listening', function() {
+    before(function() {
+      this.todoList = new TodoList();
+      this.spy(TodoItem.prototype, 'initialize');
+      this.spy(TodoItem.prototype, 'render');
+    });
+
     describe('when add event of collection is emitted', function() {
       it('should render the TodoItem', function() {
-        var todoList = new TodoList()
-          , newOne = new Backbone.Model({ id: 4 });
+        var newOne = new Backbone.Model({ id: 4 });
 
-        this.spy(TodoItem.prototype, 'initialize');
-        this.spy(TodoItem.prototype, 'render');
-
-        todoList.collection.trigger('add', newOne);
+        this.todoList.collection.trigger('add', newOne);
 
         expect(TodoItem.prototype.initialize).toHaveBeenCalledOnce();
         expect(TodoItem.prototype.initialize.args[0][0].model.id).toEqual(newOne.id);
+      });
+    });
+
+    describe('when reset event of collection is emitted', function() {
+      it('should render all TodoItems', function() {
+        var newOnes = [{ id: 5 }, { id: 6 }];
+
+        this.todoList.collection.reset(newOnes);
+
+        expect(TodoItem.prototype.initialize).toHaveBeenCalledTwice();
+        expect(TodoItem.prototype.initialize.args[0][0].model.id).toEqual(5);
+        expect(TodoItem.prototype.initialize.args[1][0].model.id).toEqual(6);
       });
     });
   });
@@ -80,13 +94,14 @@ describe('TodoList view', function() {
   });
 
   describe('create new one', function() {
-    describe('when enter key is pressed on input', function() {
-      before(function() {
-        this.todoList = new TodoList({ el: '#main' });
-        this.event = Backbone.$.Event('keypress');
-        this.spy(this.todoList.collection, 'add');
-      });
+    before(function() {
+      this.todoList = new TodoList({ el: '#main' });
+      this.event = Backbone.$.Event('keypress');
+      this.spy(this.todoList.collection, 'create');
+      this.spy(this.todoList.collection, 'add');
+    });
 
+    describe('when enter key is pressed on input', function() {
       describe('when text value is set', function() {
         it('should add a model to its collection', function() {
           this.event.keyCode = 13;
@@ -94,20 +109,31 @@ describe('TodoList view', function() {
           this.todoList.createInput.val('hoge');
           this.todoList.createInput.trigger(this.event);
 
-          expect(this.todoList.collection.add).toHaveBeenCalledOnce();
-          expect(this.todoList.collection.add.args[0][0]).toEqual([{ content: 'hoge' }]);
+          expect(this.todoList.collection.create).toHaveBeenCalledOnce();
+          expect(this.todoList.collection.create.args[0][0]).toEqual({ content: 'hoge' });
         });
       });
 
-      describe('when pushed except enter key on input', function() {
+      describe('when text value is not set', function() {
         it('should do nothing', function() {
-          this.event.keyCode = 11;
-          this.event.which = 11;
-          this.todoList.createInput.val('hoge');
+          this.event.keyCode = 13;
+          this.event.which = 13;
+          this.todoList.createInput.val('');
           this.todoList.createInput.trigger(this.event);
 
           expect(this.todoList.collection.add).not.toHaveBeenCalled();
         });
+      });
+    });
+
+    describe('when pushed except enter key on input', function() {
+      it('should do nothing', function() {
+        this.event.keyCode = 11;
+        this.event.which = 11;
+        this.todoList.createInput.val('hoge');
+        this.todoList.createInput.trigger(this.event);
+
+        expect(this.todoList.collection.add).not.toHaveBeenCalled();
       });
     });
   });

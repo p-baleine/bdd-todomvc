@@ -1,9 +1,10 @@
 build: template.js backbone-component.css components
 	@component build
+	@cp build/build.js ../server/public/javascripts/application.js
 
 template.js: template.html
 	# @component convert $<
-	@component convert ./src/templates/*.js
+	@component convert ./src/templates/*.html
 
 components:
 	@component install

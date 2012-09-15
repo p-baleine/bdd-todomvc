@@ -36,4 +36,12 @@ describe('Todos collection', function() {
       expect(Todo.prototype.initialize).toHaveBeenCalledThrice();
     });
   });
+
+  describe('parse server response', function() {
+    it('should retrieve todos from response', function() {
+      var todos = new Todos();
+
+      expect(todos.parse({ data: 'hoge' })).toEqual('hoge');
+    });
+  });
 });
