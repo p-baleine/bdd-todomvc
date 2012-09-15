@@ -43,7 +43,7 @@ describe('TodoList view', function() {
     describe('when add event of collection is emitted', function() {
       it('should render the TodoItem', function() {
         var todoList = new TodoList()
-          , newOne = new Backbone.Model({ id: 5 });
+          , newOne = new Backbone.Model({ id: 4 });
 
         this.spy(TodoItem.prototype, 'initialize');
         this.spy(TodoItem.prototype, 'render');
