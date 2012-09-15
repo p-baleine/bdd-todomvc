@@ -1,7 +1,21 @@
 <html>
   <head>
     <script src="build/build.js"></script>
+    <script>
+      (function() {
+        var $ = require('component-jquery')
+          , Backbone = require('solutionio-backbone');
+
+        Backbone.$ = $;
+
+        $(function() {
+          var TodoList = require('backbone-component/src/views/todo-list')
+            , todoList = new TodoList({ el: '#main' });
+        });
+      }());
+    </script>
   </head>
   <body>
+    <div id="main"><input class="create-todo" /></div>
   </body>
 </html>

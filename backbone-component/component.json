@@ -6,6 +6,7 @@
   "keywords": [],
   "dependencies": {
     "component/jquery": "*",
+    "component/underscore": "*",
     "solutionio/backbone": "*"
   },
   "development": {},
@@ -14,6 +15,7 @@
     "src/collections/todos.js",
     "src/views/todo-item.js",
     "src/views/todo-list.js",
+    "src/templates/todo-item.js",
     "template.js"
   ],
   "styles": [

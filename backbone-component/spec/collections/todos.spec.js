@@ -9,15 +9,9 @@ describe('Todos collection', function() {
   var Todos;
 
   before(function() {
-    var orginalRequire = window.require;
-
-    this.stub(window, 'require', function(path) {
-      if (path === 'backbone-component/src/models/todo') {
-        return Todo;
-      }
-
-      return orginalRequire.apply(window, arguments);
-    }.bind(this));
+    specHelper.stubRequire.bind(this)({
+      'backbone-component/src/models/todo': Todo
+    });
 
     Todos = require('backbone-component/src/collections/todos');
   });
@@ -33,14 +27,12 @@ describe('Todos collection', function() {
   });
 
   describe('add array of object literals', function() {
-    before(function() {
-      this.spy(Todo.prototype, 'initialize');
-    });
-
     it('should create Todo model instance', function() {
       var todos = new Todos();
 
+      this.spy(Todo.prototype, 'initialize');
       todos.add([{ id: 1 }, { id: 2 }, { id: 3 }]);
+
       expect(Todo.prototype.initialize).toHaveBeenCalledThrice();
     });
   });

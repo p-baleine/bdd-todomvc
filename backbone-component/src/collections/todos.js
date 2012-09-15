@@ -3,6 +3,8 @@ var Backbone = require('backbone.js')
 
 var Todos = module.exports = Backbone.Collection.extend({
 
-  model: Todo
+  model: Todo,
+
+  url: '/hoge'
 
 });
