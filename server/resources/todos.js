@@ -13,5 +13,13 @@ var todos = module.exports = {
     todo.save(function(err, doc) {
       res.send(doc);
     });
+  },
+
+  update: function(req, res) {
+    Todo.findOne({ _id: req.body._id }, function(err, doc) {
+      doc.save(function(err, doc) {
+        res.send(doc);
+      });
+    });
   }
 };
