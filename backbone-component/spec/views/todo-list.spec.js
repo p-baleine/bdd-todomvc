@@ -27,7 +27,7 @@ describe('TodoList view', function() {
     before(function() {
       this.spy(Todos.prototype, 'initialize');
       this.spy(Todos.prototype, 'fetch');
-      var todoList = new TodoList();
+      this.todoList = new TodoList({ input: { on: this.spy() } });
     });
 
     it('should holds Todos collection', function() {
@@ -41,7 +41,7 @@ describe('TodoList view', function() {
 
   describe('event listening', function() {
     before(function() {
-      this.todoList = new TodoList();
+      this.todoList = new TodoList({ input: { on: this.spy() } });
       this.spy(TodoItem.prototype, 'initialize');
       this.spy(TodoItem.prototype, 'render');
     });
@@ -72,7 +72,7 @@ describe('TodoList view', function() {
 
   describe('render', function() {
     before(function() {
-      this.todoList = new TodoList();
+      this.todoList = new TodoList({ input: { on: this.spy() } });
 
       this.spy(TodoItem.prototype, 'initialize');
       this.spy(TodoItem.prototype, 'render');
@@ -95,7 +95,7 @@ describe('TodoList view', function() {
 
   describe('create new one', function() {
     before(function() {
-      this.todoList = new TodoList({ el: '#main' });
+      this.todoList = new TodoList({ el: '#todo-list', input: Backbone.$('#create-todo') });
       this.event = Backbone.$.Event('keypress');
       this.spy(this.todoList.collection, 'create');
       this.spy(this.todoList.collection, 'add');

@@ -6,12 +6,9 @@ var _ = require('underscore')
 
 var TodoList = module.exports = Backbone.View.extend({
 
-  events: {
-    'keypress .create-todo': 'addOne'
-  },
-
   initialize: function() {
-    this.createInput = this.$('.create-todo');
+    this.createInput = this.options.input;
+    this.createInput.on('keypress', _.bind(this.addOne, this));
     this.collection = new Todos();
 
     this.collection.on('add', this.renderOne, this);

@@ -1,1 +1,1 @@
-module.exports = '<div class="todo-item">\n  <span class="content"><%= content %></span>\n</div>\n';
+module.exports = '<div class="view">\n  <input class="toggle" type="checkbox" />\n  <label><%- content %></label>\n  <button class="destroy"></button>\n</div>\n<input class="edit" value="<%- content %>" />\n';

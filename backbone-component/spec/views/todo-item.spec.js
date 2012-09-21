@@ -21,14 +21,36 @@ describe('TodoItem view', function() {
     expect(TodoItem).toBeFunction();
   });
 
+  describe('initialize', function() {
+    it('should holds LI as its el', function() {
+      var todoItem = new TodoItem();
+      expect(todoItem.tagName).toEqual('li');
+    });
+  });
+
   describe('render', function() {
-    it('should render TodoItem with \'todo-item\' class', function() {
+    it('should append todo item html to its el', function() {
       var todo = new Todo({ content: 'hoge' })
         , todoItem = new TodoItem({ model: todo });
 
+      this.spy(todoItem.$el, 'append');
+
       todoItem.render();
 
-      expect(todoItem.el).toHaveClassName('todo-item');
+      expect(todoItem.$el.append).toHaveBeenCalledOnce();
+    });
+  });
+
+  describe('edit', function() {
+    it('should be editable when dblclick the todo text', function() {
+      var todo = new Todo({ content: 'hoge' })
+        , todoItem = new TodoItem({ model: todo })
+        , event = Backbone.$.Event('dblclick');
+
+      todoItem.render();
+      todoItem.$('label').trigger(event);
+
+      expect(todoItem.el).toHaveClassName('editing');
     });
   });
 });

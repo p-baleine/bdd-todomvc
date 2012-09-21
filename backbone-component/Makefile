@@ -1,6 +1,7 @@
 build: template.js backbone-component.css components
 	@component build
 	@cp build/build.js ../server/public/javascripts/application.js
+	@cp build/build.css ../server/public/stylesheets/application.css
 
 template.js: template.html
 	# @component convert $<

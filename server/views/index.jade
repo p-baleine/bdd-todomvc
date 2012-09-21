@@ -1,6 +1,7 @@
 doctype 5
 html(lang="en")
   head
+    link(href='/stylesheets/application.css', rel='stylesheet', type='text/css')
     script(src='/javascripts/application.js')
     script
       (function() {
@@ -11,9 +12,10 @@ html(lang="en")
 
         $(function() {
           var TodoList = require('backbone-component/src/views/todo-list')
-            , todoList = new TodoList({ el: '#main' });
+
+          new TodoList({ el: '#todo-list', input: $('#create-todo') });
         });
       }());
   body
-    #main
-      input.create-todo
+    input#create-todo
+    ul#todo-list
